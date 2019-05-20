@@ -1,0 +1,685 @@
+﻿■ 6. 프로세서 관리
+
+	* 프로세서 관리 명령어 
+
+		1. ps 명령어
+		2. top 명령어
+		3. kill 명령어
+		4. job 명령어
+
+
+★ jobs 명령어
+
+	"동작중인 작업의 상태를 확인하는 명령어"
+
+예 : $ jobs 옵션
+
+	- 상태 정보 4가지
+		1. running : 실행중
+		2. stopped : 일시중단중
+		3. Done : 종료
+		4. terminated : 강제종료
+
+	$ vi hhh.txt
+
+		select ename, sal, job, deptno
+		  from emp
+		  where
+
+	ctrl + z <--------  하던 작업 취소
+
+	[1]		+  		Stopped                 vim hhh.txt
+	↑		↑		  ↑			    ↑
+	job번호		현재job		일시정지		동작중인 job
+
+
+	[orcl:~]$ jobs
+	[1]+  Stopped                 vim hhh.txt
+
+		※ 현재 진행중인 job을 확인할 수 있다.
+			[orcl:~]$ fg <------ 현재job으로 접속하는 명령어(for ground)
+
+	[orcl:~]$ sar 1 1000 >> sar_20181220.txt &
+	[2] 5580
+	[orcl:~]$ jobs		<----- 동작중인 작업의 상태를 확인하는 명령어
+	[1]+  Stopped                 vim hhh.txt
+	[2]-  Running                 sar 1 1000 >> sar_20181220.txt &
+
+
+
+문제 118. jobs 명령어를 수행하면 아래와 같이 결과가 출력되게 상황을 만드시오 !
+
+	[orcl:~]$ jobs
+	[1]   Stopped                 vim hhh.txt
+	[2]   Running                 sar 1 1000 >> sar_20181220.txt &
+	[3]-  Stopped                 vim hhh2.txt
+	[4]+  Stopped                 vim hhh3.txt
+	
+	[orcl:~]$ vi hhh2.txt
+	
+	[3]+  Stopped                 vim hhh2.txt
+	[orcl:~]$ vi hhh3.txt
+	
+	[4]+  Stopped                 vim hhh3.txt
+
+
+
+문제 119. 위의 일시 중단된 3번 job으로 fg하려면 어떻게 해야 하는가?
+
+	[orcl:~]$ fg 3
+	vim hhh2.txt
+	
+	[3]+  Stopped                 vim hhh2.txt
+	[orcl:~]$ jobs
+	[1]   Stopped                 vim hhh.txt
+	[2]   Running                 sar 1 1000 >> sar_20181220.txt &
+	[3]+  Stopped                 vim hhh2.txt
+	[4]-  Stopped                 vim hhh3.txt
+
+		※ 설명 : + --> 현재 job
+			  - --> 현재 job 이전에 현재 job 이었던 job
+
+
+문제 120. 4번 job에 fg하고 vi로 작업했던 작업을 정상적으로 저장하고 나오시오 !
+
+	[orcl:~]$ fg 4
+	vim hhh3.txt
+
+	ctrl + z z
+
+	[orcl:~]$ jobs
+	[1]-  Stopped                 vim hhh.txt
+	[2]   Running                 sar 1 1000 >> sar_20181220.txt &
+	[3]+  Stopped                 vim hhh2.txt
+
+
+
+
+
+
+★ top명령어
+
+	" 지금 현재 작동중인 프로세서들의 cpu 사용율과 메모리 사용율을 확인하는 명령어 "
+
+
+
+문제 121. 터미널창을 하나 더 열고 오라클에 접속해서 악성 SQL을 하나 수행하시오 !
+
+	[orcl:~]$ sqlplus / as sysdba
+		
+	SQL> select count(*)
+	  2    from sh.sales, sh.sales, sh.sales;
+
+	  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND
+	 4918 oracle    15   0  197m  20m  11m S  0.7  1.0   0:12.87 oraagent.bin
+	 4292 oracle    15   0  334m  29m  18m S  0.3  1.4   0:05.56 ohasd.bin
+	 5118 oracle    15   0  410m  14m  13m S  0.3  0.7   0:00.19 oracle
+	 5777 oracle    15   0  2336 1060  796 R  0.3  0.1   0:00.62 top
+	    1 root      15   0  2072  624  532 S  0.0  0.0   0:00.57 init
+
+
+
+
+★ ps 명령어
+	" 현재 시스템에서 수행되고 있는 프로세서의 정보를 표시하는 명령어" 
+
+	예제 : 
+		$ ps 옵션 프로세서 아이디
+
+		옵션 : 
+			-e : 현재 실행중인 모든 프로세서
+			-f : 실제 유저명, 개시시간등을 표시
+			-l : 프로세서의 상태, 우선도 등과 같은 상세한 정보
+			-p : 프로세서 아이디
+
+
+문제 122. 현재 리눅스 시스템에서 실행중인 모든 프로세서를 출력하시오 !
+
+	[orcl:~]$ ps -ef
+
+
+
+문제 123. 터미널 창을 하나 더 열고 sar 1 1000 명령어를 수행하시오 
+
+
+
+문제 124. 지금 죽은 터미널 창에서 vi 편집기 명령어로 아래의 작업을 수행하고 있으시오 !
+
+	$ vi ggg.txt
+	
+	select ename, sal, 
+
+
+
+문제 125. 지금 작업을 vim으로 수행하고 있는 프로세서들을 출력하시오 !
+
+	[orcl:~]$ ps -ef | grep vim
+	oracle    6036  5935  0 10:39 pts/2    00:00:00 vim ggg.txt
+	oracle    6047  5271  0 10:40 pts/1    00:00:00 grep vim
+
+	[orcl:~]$ ps -ef | grep vim | grep -v grep
+	oracle    6036  5935  0 10:39 pts/2    00:00:00 vim ggg.txt
+		※ 자기 자신을 제외하고 출력(-v 검색 안되게 하겠다.)
+
+	[orcl:~]$ kill -9 6036
+
+
+
+
+★ kill 명령어
+
+	$ kill -9 프로세서 번호
+
+	옵션 :  -9 : 프로세서를 죽인다.
+		-6 : 프로세서를 중단한다.
+		-2 : 프로세서에게 종료하도록 지시한다.
+
+
+문제 126. kill 옵션 중 -2 옵션을 테스트 하시오 !
+
+	- 터미널창 1
+	$ sar 1 10000
+
+	- 터미널창 2
+	$ ps -ef |grep sar    <------ 프로세서 번호 확인 
+	$ kill -2 프로세서 번호 
+
+
+
+
+
+
+■ 7. 쉘 스크립트 작성법
+
+	▷ 쉘(shell)이란 무엇인가?
+
+	   shell이란 운영체제에서 제공하는 명령을 실행하는 프로그램이다.
+
+	▷ 쉘(shell) 스크립트 란?
+
+	    인터프리터(통역사) 열활을 하는것으로 시스템에서 지원하는 명령어들의 집합을 묶어서 프로그램화
+	    한것을 말한다.
+
+	▷ 쉘(shell)의 종류
+
+		1. Bourne shell
+		2. C shell
+		3. Korn shell
+		4. bash shell
+
+		예 : #!/bin/bash ---> 쉘 중에 bash 쉘을 쓰겠다.
+	
+	▷ 쉘 스크립트 프로그래밍이란?
+
+		1. C언어와 유사한 프로그래밍
+		2. 변수, 반복문(loop문), 제어문(if문)이 사용가능
+		3. 별도로 컴파일 하지 않고 텍스트 파일 형태로 바로 실행이 가능하다.
+		4. vi 나 gedit으로 작성이 가능
+		5. 리눅스의 많은 부분이 쉘스크립트로 작성이 되어있다.
+
+
+
+
+
+★ 쉘 스크립트를 작성하고 실행하는 방법 
+	$ vi a.sh
+
+		echo "host name : " $HOSTNAME
+
+	$ sh a.sh
+	host name :  edydr1p0.us.oracle.com
+
+	[orcl:~]$ ./a.sh
+	-bash: ./a.sh: Permission denied
+
+
+
+문제 127. a.sh에 소유자가 실행할 수 있도록 실행권한을 넣으시오 !
+
+	[orcl:~]$ chmod u+x a.sh
+	[orcl:~]$ ll a.sh
+	-rwxr--r-- 1 oracle oinstall 31 Dec 20 11:41 a.sh
+	[orcl:~]$ ./a.sh
+	host name :  edydr1p0.us.oracle.com
+
+		설명 : ./파일명.sh으로 실행하려면 실행권한이 있어야 된다.
+		       sh 파일명.sh 은 파일의 실행권한이 없어도 실행된다.
+
+
+
+
+★ 변수 사용법 
+
+	1. 모든 변수는 '문자열(string)' 으로 취급된다.
+	2. 변수 이름은 대소문자를 구분한다.
+	3. 변수에 값을 대입할 때는 '=' 좌우에 공백이 없어야한다.
+	4. 변수에 들어간 문자를 출력하려면 변수 앞에 $ 를 붙이고 echo명령어로 출력하면 된다.
+
+	예 : $ myvar="Hi !!!!!!!!"
+	     $ echo $myvar
+
+
+
+
+★ 변수의 숫자 계산하는 방법 
+
+	1. 변수에 대입한 값은 모두 문자열로 취급이 된다.
+	2. 변수에 들어있는 값을 숫자로 해서 + * / - 등의 연산을 하려면 expr을 사용해야 한다.
+	3. 수식에 괄호 또는 곱하기(*)를 사용하려면 그 앞에 반드시 (\)를 붙여야 한다.
+
+	예 : 
+		[orcl:~]$ num1=100
+		[orcl:~]$ num2=200
+		[orcl:~]$ echo $num1
+		100
+		[orcl:~]$ echo $num2
+		200
+		[orcl:~]$ echo $num2 + $num2
+		200 + 200
+		[orcl:~]$ expr $num1 + $num2
+		300
+
+
+
+문제 128. num1 과 num2의 곱을 구하시오 !
+
+	[orcl:~]$ num1=100
+	[orcl:~]$ num2=200
+	[orcl:~]$ expr $num1 \* $num2
+	20000
+
+
+
+문제 129. (점심시간 문제) 아래의 계산식을 구현하시오 !
+
+	($num2 + 200) \* $num1
+
+	[orcl:~]$ expr \( $num2 + 200 \) \* $num1
+	40000
+
+
+
+
+
+
+★ 파라미터 변수 
+
+	1. 파라미터 변수는 $0, $1, $2, ...의 형태를 가진다. 
+	2. 전체 파라미터는 $*로 표현한다.
+
+	예제 :
+		[orcl:~]$ vi b.sh
+		echo "실행파일 이름은 $0 입니다."
+		echo "첫번째 파라미터 값은 $1 입니다."
+		echo "두번째 파라미터 값은 $2 입니다."
+		echo "전체 파라미터 값은 $* 입니다."
+		
+		[orcl:~]$ sh b.sh 10 20
+		실행파일 이름은 b.sh 입니다.
+		▒첫번째 파라미터 값은 10 입니다.	
+		두번째 파라미터 값은 20 입니다.
+		전체 파라미터 값은 10 20 입니다.
+
+
+
+
+문제 130. 아래와 같이 두 정수를 파라미터 값으로 입력 했을 때 나눈 나머지 값이 출력되게 하시오!
+
+	[orcl:~]$ vi f.sh
+	num1=$1
+	num2=$2
+	num3=`expr $num1 + $num2`
+	echo "$num1와 $num2를 더하면 $num3 입니다."
+	
+	[orcl:~]$ sh f.sh 18 24
+	18와 24를 더하면 42 입니다.
+
+		※ 설명 : 변수=`리눅스 명령어`
+			리눅스 명령어에 의해서 수행된 결과가 변수에 입력 되어야 한다면 역 따옴표를 사용해야 한다.
+
+
+
+문제 131. 아래의 두 수를 각각 물어보게 하고 아래의 두 수를 곱한 결과가 출력되게 하시오 !
+
+[orcl:~]$ vi two_number.sh 12 54
+num3=`expr $1 \* $2`
+echo "$1 와 $2 를 곱하면 $num3 입니다."
+
+[orcl:~]$ sh two_number.sh 12 54
+12 와 54 를 곱하면 648 입니다.
+
+
+
+
+
+★ 리눅스 쉘에서 if문 사용방법
+
+	if  [ 조건 ]; then
+		실행문
+	elif [ 조건 ]; then
+		실행문
+	else
+		실행문
+	fi
+
+		※ if 문 사용시 주의사항 ! "공백처리를 잘해줘야 한다."
+
+
+
+
+★ if 문 조건문에 들어가는 비교 연산자
+
+	- 문자열 비교
+		1. "문자열1"  = "문자열2" : 두 문자열이 같으면 true
+		2. "문자열1" != "문자열2" : 두 문자열이 같지 않으면 true
+
+	- 숫자열 비교
+		1. 숫자1 -eq 숫자2 : 두 숫자가 같으면 True			equal
+		2. 숫자1 -ne 숫자2 : 두 숫자가 같지 않으면 True			not equal
+		3. 숫자1 -gt 숫자2 : 숫자1이 숫자2보다 크다면 True		greater
+		4. 숫자1 -ge 숫자2 : 숫자1이 숫자2보다 크거나 같다면 True	greater or equal
+		5. 숫자1 -lt 숫자2 : 숫자1이 숫자2보다 작다면 True		little
+		6. 숫자1 -le 숫자2 : 숫자1이 숫자2보다 작거나 같으면 True	le - little or equal
+		7. !숫자1          : 숫자1이 거짓이라면 True
+
+
+	예제 : 
+		[orcl:~]$ vi if1.sh
+		#!/bin/bash
+		
+		if [ 100 -eq 200 ]; then
+		   echo "100 is equal to 200"
+		else
+		   echo "100 is not equal to 200"
+		fi
+		
+		[orcl:~]$ sh if1.sh
+		100 is not equal to 200
+
+
+
+문제 132. 위의 스크립트를 파라미터 변수를 이용해서 아래와 같이 실행될 수 있게 하시오 !
+
+	[orcl:~]$ vi if1.sh
+	#!/bin/bash
+	
+	if [ $1 -eq $2 ]; then
+	   echo "$1 is equal to $2"
+	else
+	   echo "$1 is not equal to $2"
+	fi
+	
+	[orcl:~]$ sh if1.sh 100 200
+	100 is not equal to 200
+	[orcl:~]$ sh if1.sh 100 100
+	100 is equal to 100
+
+
+
+문제 133. 아래와 같이 실행되게 쉘 스크립트를 작성하시오 !
+
+	[orcl:~]$ sh if2.sh 100 200
+	100 is little than  200
+	[orcl:~]$ sh if2.sh 200 100
+	200 is greater than 100
+	[orcl:~]$ sh if2.sh 200 200
+	200 is equal to 200
+
+	[orcl:~]$ vi if2.sh
+	#!/bin/bash
+	
+	if [ $1 -gt $2 ]; then
+	   echo "$1 is greater than $2"
+	elif [ $1 -lt $2 ]; then
+	   echo "$1 is little than  $2"
+	else
+	   echo "$1 is equal to $2"
+	fi
+
+
+
+
+★ 리눅스에서 사용하는 연산자
+
+	※ 리눅스의 연산자 3가지
+	
+	   1. 산술 연산자 : +, -, *, /
+	   2. 비교 연산자 : >, <, >=, <=, ==, !=
+	   3. 논리 연산자 : &&, ||, !
+
+		논리 연산자인 and 는 && 또는 -a를 사용한다.
+		논리 연산자인 ro  는 || 또는 -o를 사용한다.
+
+
+	예제 :
+		if [ $sal -lt 2000 ] && [ $job=="SALESMAN" ]; then
+
+				또는
+
+		if [ $sal -lt 2000 -a $job=="SALESMAN" ]; then
+
+
+
+문제 134. 아래와 같이 쉘 스크립트를 실행하면 아래와 같은 결과가 출력되게 하시오 !
+
+	[orcl:~]$ sh find_sal.sh scott
+	SCOTT 의 월급은 3000입니다.
+
+	[orcl:~]$ vi find_sal.sh
+	ename=$1
+	grep -i $ename emp.txt | awk '{print $2,"의 월급은",$6"입니다."}'
+	
+
+
+문제 135. 아래와 같이 실행했을 때 해당 사원의 부서번호가 30번이고 월급이 2000 보다 작다면
+	  "월급 인상 대상자 입니다." 라는 메세지가 나오게 하고 그렇지 않다면 
+	  "월급 인상 대상자가 아닙니다." 라는 메세지가 출력되게 하시오 !
+
+	[orcl:~]$ vi find_sal.sh
+	#!/bin/bash
+	
+	ename=$1
+	sal=`grep -i $ename emp.txt | awk '{print $6}'`
+	deptno=`grep -i $ename emp.txt | awk '{print $8}'`
+	if [ $sal -lt 2000 -a $deptno -eq 30]; then
+	   echo "월급 인상 대상자 입니다."
+	else
+	   echo "월급인상 대상자가 아닙니다."
+	fi
+	
+	[orcl:~]$ sh find_sal.sh miller
+	월급인상 대상자가 아닙니다.
+	[orcl:~]$ sh find_sal.sh martin
+	월급 인상 대상자 입니다.
+
+
+
+
+★ loop 문
+
+	* for loop문 문법
+		for 변수 in 값1,값2,값3
+		do
+		  반복할 문장
+		done
+
+	예제 : 
+		[orcl:~]$ vi for.sh
+		#!/bin/bash
+		
+		hap=0
+		for i in {1..10}
+		do
+		  hap=`expr $hap + $i`
+		done
+		  echo "1부터 10까지의 합은 " $hap
+		
+		[orcl:~]$ sh for.sh
+		1부터 10까지의 합은  55
+
+	-우분투버전
+		#!/bin/bash
+
+		hap=0
+		for i in $(seq 1 10)
+		do
+		  hap=$(( $hap + $i ))
+		done
+		  echo "1부터 10까지의 합은 " $hap
+
+
+
+문제 136. 위의 코드를 수정해서 구구단 2단을 출력하시오 !
+
+	[orcl:~]$ vi for.sh
+	#!/bin/bash
+	
+	gop=1
+	for i in {1..9}
+	do
+	  gop=`expr 2 \* $i`
+	  echo "2 x $i = $gop"
+	done
+	
+	[orcl:~]$ sh for.sh
+	2 x 1 = 2
+	2 x 2 = 4
+	2 x 3 = 6
+	2 x 4 = 8
+	2 x 5 = 10
+	2 x 6 = 12
+	2 x 7 = 14
+	2 x 8 = 16
+	2 x 9 = 18
+
+
+
+문제 137. 구구단 2단부터 9단까지 출력하시오 !
+
+	[orcl:~]$ vi for.sh
+	#!/bin/bash
+	
+	gop=1
+	for i in {2..9}
+	do
+	   for j in {1..9}
+	   do
+	      gop=`expr $i \* $j`
+	      echo "$i x $j = $gop"
+	   done
+	done
+	
+	[orcl:~]$ sh for.sh
+	2 x 1 = 2
+	2 x 2 = 4
+	2 x 3 = 6
+	2 x 4 = 8
+	    :
+	9 x 7 = 63
+	9 x 8 = 72
+	9 x 9 = 81
+
+
+
+문제 138. 아래의 별표를 출력하시오 !
+
+	[orcl:~]$ vi star.sh
+	star=""
+	for i in {1..5}
+	do
+	  star="$star★"
+	  echo $star
+	done
+	
+	[orcl:~]$ sh star.sh
+	★
+	★★
+	★★★
+	★★★★
+	★★★★★
+
+
+
+문제 139. 위의 코드를 수정해서 숫자를 물어보게 하고 숫자를 입력하면 해당 숫자만큼 ★이 출력되게 하시오 !
+
+	[orcl:~]$ vi start.sh
+	echo -n "input number : "
+	read num
+	star=""
+	for i in `eval echo {1..$num}`
+	do
+	  star="$star★"
+	  echo $star
+	done
+	
+	[orcl:~]$ sh start.sh
+	input number : 4
+	★
+	★★
+	★★★
+	★★★★
+
+
+
+
+
+	※ 설명 : eval 명령어는 문자열을 명령문으로 인식하고 실행하는 명령어
+		[orcl:~]$ eval echo {1..10}
+		1 2 3 4 5 6 7 8 9 10
+
+	
+
+문제 140. (오늘의 마지막 문제) 숫자를 물어보게 하고 아래와 같이 결과를 출력하시오 !
+
+	[orcl:~]$ vi star.sh
+	echo -n "input number : "
+	read num
+	star=""
+	for i in `eval echo {$num..1}`
+	do
+	  for j in `eval echo {1..$i}`
+	  do
+	    star="$star★"
+	    done
+	  echo $star
+	  star=""
+	done
+
+	[orcl:~]$ sh star.sh
+	input number : 5
+	★★★★★
+	★★★★
+	★★★
+	★★
+	★
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

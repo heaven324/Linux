@@ -1,0 +1,768 @@
+﻿■ while loop문 
+
+	문법 :     조건에 만족할 때만 루프문을 반복 수행한다.
+			 ↓
+		while [ 조건 ]	   ← 한칸씩 띄어쓰기를 해야한다.
+		do
+		    실행문
+		done
+
+	예제 : 
+		[orcl:~]$ vi test.sh
+		i=1
+		while [ $i -le 10 ]
+		do
+		    echo $i
+		    i=`expr $i + 1`
+		done
+
+		[orcl:~]$ sh test.sh
+		1
+		2
+		3
+		4
+		5
+		6
+		7
+		8
+		9
+		10
+
+
+문제 157. 구구단 2단을 출력하시오 ! (while loop문으로)
+
+	[orcl:~]$ vi a.sh
+	#!/bin/bash
+	
+	i=1
+	while [ $i -le 9 ]
+	do
+	    gop=`expr $i \* 2`
+	    echo "2 x $i = $gop"
+	    i=`expr $i + 1`
+	done
+	
+	[orcl:~]$ sh a.sh
+	2 x 1 = 2
+	2 x 2 = 4
+	2 x 3 = 6
+	2 x 4 = 8
+	2 x 5 = 10
+	2 x 6 = 12
+	2 x 7 = 14
+	2 x 8 = 16
+	2 x 9 = 18
+
+
+
+문제 158. (while loop문의 중첩)
+	  구구단을 2단부터 9단까지 출력하시오 !
+
+	[orcl:~]$ vi a.sh
+	#!/bin/bash
+	
+	i=1
+	j=2
+	while [ $j -le 9 ]
+	do
+	    while [ $i -le 9 ]
+	    do
+	        gop=`expr $i \* $j`
+	        echo "$j x $i = $gop"
+	        i=`expr $i + 1`
+	    done
+	    echo "----------------"
+	    i=1
+	    j=`expr $j + 1`
+	done
+		
+	[orcl:~]$ sh a.sh
+	2 x 1 = 2	
+	2 x 2 = 4
+	2 x 3 = 6
+		:
+		:
+	----------------
+		:
+		:
+	9 x 7 = 63
+	9 x 8 = 72
+	9 x 9 = 81
+
+
+문제 159. 아래와 같이 ★를 while loop 문으로 구현하시오 !
+
+	[orcl:~]$ vi star.sh
+	#!/bin/bash
+	
+	echo -n "input number : "
+	read num
+	star=""
+	i=1
+	while [ $i -le $num ]
+	do	
+	    j=1
+	    while [ $j -le $i ]
+	    do
+	        star="$star▒~X~E"
+	        j=`expr $j + 1`
+	        done
+	    echo $star
+	    star=""
+	    i=`expr $i + 1`
+	done	
+	
+	[orcl:~]$ sh star.sh
+	input number : 5
+	★
+	★★
+	★★★
+	★★★★
+	★★★★★
+
+
+
+문제 160. 아래의 power함수를 while loop문으로 구현하시오 !
+
+	SQL> select power(2, 3) from dual;
+	8
+
+	[orcl:~]$ vi power.sh
+	#!/bin/bash
+	
+	num=1
+	i=1
+	while [ $i -le $2 ]
+	do
+	    num=`expr $num \* $1`
+	    i=`expr $i + 1`
+	done
+	echo $num
+	
+	[orcl:~]$ sh power.sh 2 3
+	8
+
+
+
+문제 161. while loop문으로 factorial을 구현하시오 !
+
+	[orcl:~]$ vi factorial.sh
+	#!/bin/bash
+	
+	num=1
+	i=1
+	while [ $i -le $1 ]
+	do
+	    num=`expr $num \* $i`
+	    i=`expr $i + 1`
+	done
+	echo $num
+	
+	[orcl:~]$ sh factorial.sh 5
+	120
+
+
+문제 162. log 함수를 while loop문으로 구현하시오 !
+
+	[orcl:~]$ vi log.sh
+	#!/bin/bash
+	
+	log_val=1
+	i=$1
+	while [ $i -lt $2 ]
+	do
+	    i=`expr $i \* $1`
+	    log_val=`expr $log_val + 1`
+	done
+	echo $log_val
+	
+	[orcl:~]$ sh log.sh 2 16
+	4
+
+
+
+문제 163. (점심시간 문제) 최대공약수를 while loop문으로 구현하시오 !
+
+	[orcl:~]$ vi gcd.sh
+	num1=$1
+	num2=$2
+	dummy=0
+	i=1
+	while [ $i -eq 1 ]
+	do
+	    if [ $num1 -lt $num2 ]; then
+	        dummy=$num1
+	        num1=$num2
+	        num2=$dummy
+	    fi
+	
+	    dummy=`expr $num1 % $num2`
+	    num1=$num2
+	    num2=$dummy
+	    if [ $num2 -eq 0 ]; then
+	        i=2
+	    fi
+	done
+	
+	echo $num1
+	
+	[orcl:~]$ sh gcd.sh 24 16
+	8
+	[orcl:~]$ sh gcd.sh 52 16
+	4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+■ 파일과 관련된 조건
+
+	1. -d 파일명 : 파일이 디렉토리이면 true
+	2. -e 파일명 : 파일이 존재하면 true
+	3. -f 파일명 : 파일이 일반 파일이면 true
+	4. -r 파일명 : 파일이 읽기 가능하면 true
+	5. -s 파일명 : 파일이 크기가 0이 아니면 true
+	6. -w 파일명 : 파일이 쓰기가 가능한 상태면 true
+	7. -x 파일명 : 파일이 실행가능한 상태면 true
+
+
+	예제 : 
+		[orcl:~]$ vi test.sh
+		#!/bin/bash
+
+	fname=/home/oracle/emp.txt
+	if [ -e $fname ]; then
+	    cat $fname
+	else
+	    echo "파일이 없습니다."
+	fi
+
+		[orcl:~]$ sh test.sh
+		 7839 KING                 PRESIDENT                   0 81/11/17       5000          0         10
+		 7698 BLAKE                MANAGER                  7839 81/05/01       2850          0         30
+
+
+
+문제 164. 위의 스크립트를 수정해서 파일명을 물어보게 하고 파일이 존재하면 파일의 내용이 출력되게 하고 
+	  파일이 없으면 "파일이 없습니다." 라는 메세지가 출력되게 하시오 !
+
+	[orcl:~]$ vi a.sh
+	#!/bin/bash
+	
+	echo "보고싶은 파일명을 입력하세요 ~ "
+	read file_name
+	
+	fname=/home/oracle/$file_name
+	if [ -e $fname ]; then
+	    cat $fname
+	else
+	    echo "파일이 없습니다."
+	fi
+
+	[orcl:~]$ sh a.sh
+	input file name :
+	dept.txt
+	10 ACCOUNTING     NEWYORK
+	20 RESEARCH       DALLAS
+	30 SALES          CHICAGO
+	40 OPERATIONS     BOSTON
+
+
+문제 165. emp.txt 에서 직업이 salesman인 사원들의 data만 가지고 salesman.txt 라는 파일을 생성하시오 !
+
+[orcl:~]$ grep -i 'salesman' emp.txt >> salesman.txt
+[orcl:~]$ cat salesman.txt
+ 7654 MARTIN               SALESMAN                 7698 81/09/10       1250       1400         30
+ 7499 ALLEN                SALESMAN                 7698 81/02/11       1600        300         30
+ 7844 TURNER               SALESMAN                 7698 81/08/21       1500          0         30
+ 7521 WARD                 SALESMAN                 7698 81/02/23       1250        500         30
+
+
+
+문제 166. 위의 스크립트를 가지고 shell을 생성하는데 직업을 물어보게하고 직업을 입력하면 해당 직업의 data를 가지고
+	  txt파일이 만들어지게 하시오 !
+
+	★라이나 생명에서 데이터 분석을 했던 데이터 분석 내용 
+		1. 하둡, 오라클, 리눅스 쉘에서 데이터를 필터링을 하고
+			예 : 라이나 생명 고객중 40대만 따로 분리해서 text파일을 생성
+		2. 40대의 데이터를 가지고 군집분석(k-means)		: R, 파이썬
+		3. 40대의 데이터를 가지고 연관분석(아프리오리 알고리즘)	: R, 파이썬
+		
+
+	[orcl:~]$ vi make_job.sh
+	#!/bin/bash
+	
+	echo "직업을 입력하세요 ~ "
+	read job
+	
+	grep -i $job emp.txt >> $job.txt
+	cat $job.txt
+	
+	[orcl:~]$ sh make_job.sh
+	 7902 FORD                 ANALYST                  7566 81/12/11       3000          0         20
+	 7788 SCOTT                ANALYST                  7566 82/12/22       3000          0         20
+
+
+
+
+문제 167. 문제 166번 코드를 수정해서 이미 생성된 직업.txt 가 존재한다면 해당 파일은 이미 있습니다.라는 메세지가 
+	  출력되게 하고 없으면 직업.txt 가 생성되게 하시오 !
+
+	[orcl:~]$ vi make_job.sh
+	#!/bin/bash
+	
+	echo "직업을 입력하세요 ~ "
+	read job
+	
+	if [ -e $job.txt ]; then
+	    echo "해당 직업의 파일은 이미 있습니다."
+	else
+	    grep -i $job emp.txt >> $job.txt
+	    cat $job.txt
+	fi
+	
+	[orcl:~]$ sh make_job.sh
+	직업을 입력하세요 ~
+	analyst
+	해당 직업의 파일은 이미 있습니다.
+
+
+
+문제 168. 위의 문제처럼 직업을 일일이 물어보지 않아도 그냥 알아서 모든 직업에 대한 파일이 아래와 같이 생성
+	  되게끔 쉘 스크립트를 작성하시오 !
+	[orcl:~]$ vi make_job.sh
+	#!/bin/bash
+	
+	for i in `awk '{print $3}' emp.txt | sort | uniq`
+	do
+	    if [ -e $i.txt ]; then
+	        echo "해당직업의 파일은 이미 있습니다."
+	    else
+	        grep -i $i emp.txt >> $i.txt
+	        cat $i.txt
+	        echo "$i 파일이 생성되었습니다."
+	    fi
+	done
+	
+	[orcl:~]$ sh make_job.sh
+	 7902 FORD                 ANALYST                  7566 81/12/11       3000          0         20
+	 7788 SCOTT                ANALYST                  7566 82/12/22       3000          0         20
+	ANALYST 파일이 생성 되었습니다.
+	 7900 JAMES                CLERK                    7698 81/12/11        950          0         30
+	 7369 SMITH                CLERK                    7902 80/12/09        800          0         20
+	 7876 ADAMS                CLERK                    7788 83/01/15       1100          0         20
+	 7934 MILLER               CLERK                    7782 82/01/11       1300          0         10
+	CLERK 파일이 생성 되었습니다.
+	 7698 BLAKE                MANAGER                  7839 81/05/01       2850          0         30
+	 7782 CLARK                MANAGER                  7839 81/05/09       2450          0         10
+	 7566 JONES                MANAGER                  7839 81/04/01       2975          0         20
+	MANAGER 파일이 생성 되었습니다.
+	 7839 KING                 PRESIDENT                   0 81/11/17       5000          0         10
+	PRESIDENT 파일이 생성 되었습니다.
+	 7654 MARTIN               SALESMAN                 7698 81/09/10       1250       1400         30
+	 7499 ALLEN                SALESMAN                 7698 81/02/11       1600        300         30
+	 7844 TURNER               SALESMAN                 7698 81/08/21       1500          0         30
+	 7521 WARD                 SALESMAN                 7698 81/02/23       1250        500         30
+	SALESMAN 파일이 생성 되었습니다.
+
+
+
+문제 169. 위의 스크립트를 활용해서 부서번호별로 emp.txt가 쪼개지게끔 스크립트를 작성하시오 !
+
+	[orcl:~]$ vi make_deptno.sh
+	#!/bin/bash
+	
+	for i in `awk '{print $8}' emp.txt | sort | uniq`
+	do
+	    if [ -e $i.txt ]; then
+	        echo "해당 부서번호의 파일은 이미 있습니다."
+	    else
+	        awk '$8=='$i emp.txt >> $i.txt
+	        cat $i.txt
+	        echo "$i 파일이 생성되었습니다."
+	    fi
+	done
+	
+	[orcl:~]$ sh make_deptno.sh
+	 7839 KING                 PRESIDENT                   0 81/11/17       5000          0         10
+	 7782 CLARK                MANAGER                  7839 81/05/09       2450          0         10
+	 7934 MILLER               CLERK                    7782 82/01/11       1300          0         10
+	10 파일이 생성되었습니다.
+	 7566 JONES                MANAGER                  7839 81/04/01       2975          0         20
+	 7902 FORD                 ANALYST                  7566 81/12/11       3000          0         20
+	 7369 SMITH                CLERK                    7902 80/12/09        800          0         20
+	 7788 SCOTT                ANALYST                  7566 82/12/22       3000          0         20
+	 7876 ADAMS                CLERK                    7788 83/01/15       1100          0         20
+	20 파일이 생성되었습니다.
+	 7698 BLAKE                MANAGER                  7839 81/05/01       2850          0         30
+	 7654 MARTIN               SALESMAN                 7698 81/09/10       1250       1400         30
+	 7499 ALLEN                SALESMAN                 7698 81/02/11       1600        300         30
+	 7844 TURNER               SALESMAN                 7698 81/08/21       1500          0         30
+	 7900 JAMES                CLERK                    7698 81/12/11        950          0         30
+	 7521 WARD                 SALESMAN                 7698 81/02/23       1250        500         30
+	30 파일이 생성되었습니다.
+
+
+
+
+
+
+
+
+
+
+
+■ 데이터 분석을 위해 만들어야할 리눅스 쉘 스크립트 
+
+	1. 데이터를 분리하는 스크립트
+	2. 오라클 --> R 또는 파이썬 에서 분석할 수 있도록 text파일로 생성하는 작업
+	3. 자동화 스크립트
+
+
+
+
+
+
+
+
+
+■ 오라클의 data를 csv 로 생성하는 방법
+
+	1. 오라클에 접속을 한다 
+		[orcl:~]$ sqlplus / as sysdba
+
+		SQL> show user
+		USER is "SYS"
+
+	2. scott 계정과 hr계정의 lock을 해제하고 패스워드를 tiger로 변경하시오 !
+
+		SQL> alter user scott
+		  2    account unlock;
+		
+		User altered.
+		
+		SQL> alter user scott
+		  2  identified by tiger;
+		
+		User altered.
+
+		SQL> connect scott/tiger
+		Connected.
+
+		SQL> select * from emp;
+		
+		     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO
+		---------- ---------- --------- ---------- --------- ---------- ---------- ----------
+		      7369 SMITH      CLERK           7902 17-DEC-80        800                    20
+		      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30
+		      7521 WARD       SALESMAN        7698 22-FEB-81       1250        500         30
+							:
+							:
+		      7902 FORD       ANALYST         7566 03-DEC-81       3000                    20
+		      7934 MILLER     CLERK           7782 23-JAN-82       1300                    10
+
+
+
+문제 170. 직업과 직업별 토탈월급을 출력하는데 직업별 토탈월급이 큰 것부터 출력하시오 !
+
+	SQL> select job, sum(sal)
+	  2    from emp
+	  3    group by job
+	  4    order by sum(sal) desc;
+	
+	JOB         SUM(SAL)
+	--------- ----------
+	MANAGER         8275
+	ANALYST         6000
+	SALESMAN        5600
+	PRESIDENT       5000
+	CLERK           4150
+
+		※ 만약 쿼리가 틀려서 수정해야 한다면 ?
+			ed 명령어로 수정해야 하는데 리눅스에서는 vi 편집기가 열리도록 설정해야 한다.
+
+
+★ 리눅스 sqlplus 에서 ed 쳤을 때 vi 편집기가 열리게 하는 방법
+
+	[orcl:~]$ cd $ORACLE_HOME/sqlplus/admin
+	[orcl:admin]$ pwd
+	/u01/app/oracle/product/11.2.0/dbhome_1/sqlplus/admin
+
+	[orcl:admin]$ vi glogin.sql		#sqlplus의 환경설정 파일
+	--
+	-- Copyright (c) 1988, 2005, Oracle.  All Rights Reserved.
+	--
+	-- NAME
+	--   glogin.sql
+	--
+	-- DESCRIPTION
+	--   SQL*Plus global login "site profile" file
+	--
+	--   Add any SQL*Plus commands here that are to be executed when a
+	--   user starts SQL*Plus, or uses the SQL*Plus CONNECT command.
+	--
+	-- USAGE
+	--   This script is automatically run
+	--
+	define _editor='vi'
+
+	[orcl:admin]$ cd
+	[orcl:~]$ sqlplus scott/tiger
+
+	SQL> show user
+	USER is "SCOTT"
+
+	SQL> select job, sum(sal)
+	  2    from emp
+	  3    group by job
+	  4    order by sum(sal) des;
+	  order by sum(sal) des
+	                    *
+	ERROR at line 4:
+	ORA-00933: SQL command not properly ended
+	
+	
+	SQL> ed
+	Wrote file afiedt.buf
+	
+	  1  select job, sum(sal)
+	  2    from emp
+	  3    group by job
+	  4*   order by sum(sal) desc
+
+	SQL> /
+	
+	JOB         SUM(SAL)
+	--------- ----------
+	MANAGER         8275
+	ANALYST         6000
+	SALESMAN        5600
+	PRESIDENT       5000
+	CLERK           4150
+
+
+
+■ 리눅스의 emp테이블의 데이터를 csv로 생성하는 방법
+
+
+	SQL> spool on
+	SQL> spool result.txt
+	SQL> select * from dept;
+	
+	    DEPTNO DNAME          LOC
+	---------- -------------- -------------
+	        10 ACCOUNTING     NEW YORK
+	        20 RESEARCH       DALLAS
+	        30 SALES          CHICAGO
+	        40 OPERATIONS     BOSTON
+	
+	SQL> spool off
+
+	SQL> ed result.txt
+
+	SQL> select * from dept;
+	
+	    DEPTNO DNAME          LOC
+	---------- -------------- -------------
+	        10 ACCOUNTING     NEW YORK
+	        20 RESEARCH       DALLAS
+	        30 SALES          CHICAGO
+	        40 OPERATIONS     BOSTON
+	
+	SQL> spool off
+
+	※ sqlplus에서 spool 명령어를 이용하면 데이터를 txt나 csv파일로 생성할 수 있다.
+
+
+	[orcl:~]$ vi create_emp_data.sql
+	set colsep ','			# 데이터를 , 로 구분하겠다.
+	set pagesize 20			# 결과의 세로 사이즈 조절
+	set linesize 120		# 결과의 가로 사이즈 조절
+	set sqlprompt ""		# SQL> <------ 안나오게 하는 명령어
+	set feedback off		# 몇 건이 출력되었습니다. 안나오게 하는 명령어
+	set echo off			
+	set underline off		# 컬럼명 밑에 언더라인 사라지게
+	
+	spool emp.csv
+	
+	select * from emp;
+	
+	spool off
+	
+	exit
+	
+	[orcl:~]$ sqlplus scott/tiger
+	SQL> @create_emp_data.sql
+	
+	[orcl:~]$ cat emp.csv
+	
+	     EMPNO,ENAME     ,JOB      ,       MGR,HIREDATE ,       SAL,      COMM,    DEPTNO 
+	      7369,SMITH     ,CLERK    ,      7902,17-DEC-80,       800,          ,        20 
+	      7499,ALLEN     ,SALESMAN ,      7698,20-FEB-81,      1600,       300,        30 
+	      7521,WARD      ,SALESMAN ,      7698,22-FEB-81,      1250,       500,        30 
+	      7566,JONES     ,MANAGER  ,      7839,02-APR-81,      2975,          ,        20
+	      7654,MARTIN    ,SALESMAN ,      7698,28-SEP-81,      1250,      1400,        30
+	      7698,BLAKE     ,MANAGER  ,      7839,01-MAY-81,      2850,          ,        30
+	      7782,CLARK     ,MANAGER  ,      7839,09-JUN-81,      2450,          ,        10 
+	      7788,SCOTT     ,ANALYST  ,      7566,19-APR-87,      3000,          ,        20 
+	      7839,KING      ,PRESIDENT,          ,17-NOV-81,      5000,          ,        10 
+	      7844,TURNER    ,SALESMAN ,      7698,08-SEP-81,      1500,         0,        30
+	      7876,ADAMS     ,CLERK    ,      7788,23-MAY-87,      1100,          ,        20 
+	      7900,JAMES     ,CLERK    ,      7698,03-DEC-81,       950,          ,        30 
+	      7902,FORD      ,ANALYST  ,      7566,03-DEC-81,      3000,          ,        20
+	      7934,MILLER    ,CLERK    ,      7782,23-JAN-82,      1300,          ,        10 
+
+
+
+문제 171. 테이블명을 물어보게하고 타이블명을 입력하면 해당 테이블의 데이터를 csv파일로 생성하는 쉘스크립트를
+	  작성하시오 !
+
+	[orcl:~]$ vi make_csv.sh
+	#!/bin/bash
+	echo "★★★★★★★★★★★★"
+	echo -n "테이블명을 입력하세요 : "
+	read table
+	echo "★★★★★★★★★★★★"
+	echo " "
+	sqlplus scott/tiger << EOF
+	set colsep ','
+	set pagesize 20
+	set linesize 120
+	set sqlprompt ""
+	set feedback off
+	set echo off
+	set underline off
+	
+	spool $table.csv
+	
+	select * from $table;
+	
+	spool off
+	
+	EOF
+
+
+
+문제 172. dept.csv에서 1번과 2번 라인을 삭제하고 dept2.csv로 저장되게 하시오 !
+
+	[orcl:~]$ sed '1,2d' dept.csv >> dept2.csv
+	[orcl:~]$ sed '/spool/d' dept2.csv >> dept3.csv
+	[orcl:~]$ cat dept3.csv
+	
+	    DEPTNO,DNAME         ,LOC
+	        10,ACCOUNTING    ,NEW YORK 
+	        20,RESEARCH      ,DALLAS  
+	        30,SALES         ,CHICAGO
+	        40,OPERATIONS    ,BOSTON 
+
+
+문제 173. dept.csv를 지우고 dept3.csv를 dept.csv로 이름을 변경하시오 !
+	
+	[orcl:~]$ rm dept.csv
+	[orcl:~]$ mv dept3.csv dept.csv
+	[orcl:~]$ cat dept.csv
+	
+	    DEPTNO,DNAME         ,LOC
+	        10,ACCOUNTING    ,NEW YORK
+	        20,RESEARCH      ,DALLAS
+	        30,SALES         ,CHICAGO
+	        40,OPERATIONS    ,BOSTON
+
+
+문제 174. 아래의 스크립트를 clean.sh 로 저장하시오 !
+
+	
+	#!/bin/bash
+	
+	sed '1,2d' /home/oracle/$1 > /home/oracle/$12
+	sed '/spool/d' /home/oracle/$12 > /home/oracle/$13
+	sed '/^$/d' /home/oracle/$13 > /home/oracle/$14
+	rm /home/oracle/$1
+	mv /home/oracle/$14 /home/oracle/$1
+
+
+
+문제 175. make_csv.sh를 이용해서 emp.csv를 생성하시오 !
+
+	[orcl:~]$ sh make_csv.sh
+	★★★★★★★★★★★★
+	테이블명을 입력하세요 : emp
+	★★★★★★★★★★★★
+	[orcl:~]$ sh clean.sh emp.csv
+
+
+
+문제 176. make_csv.sh 에 clean.sh 스크립트를 수행하는 스크립트 맨 아래에 입력해서 스크립트를 합치시오 !
+
+	[orcl:~]$ vi make_csv.sh
+	#!/bin/bash
+	echo "▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E"
+	echo -n "▒~E~L▒~]▒▒~T▒~E▒~]~D ▒~^~E▒| ▒▒~U~X▒~D▒▒~Z~T : "
+	read table
+	echo "▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E▒~X~E"
+	echo " "
+	sqlplus scott/tiger << EOF
+	set colsep ','
+	set pagesize 20
+	set linesize 120
+	set sqlprompt ""
+	set feedback off
+	set echo off
+	set underline off
+	
+	spool $table.csv
+	
+	select * from $table;
+	
+	spool off
+	
+	EOF
+	
+	sh clean.sh $table.csv
+
+
+
+문제 177. (오늘의 마지막 문제) hr 계정이 가지고 있는 모든 테이블들을 전부 csv 로 생성하시오 !
+
+	[orcl:~]$ sqlplus / as sysdba
+	
+	SQL> alter user hr
+	  2  account unlock;
+	
+	User altered.
+	
+	SQL> alter user hr
+	  2   identified by hr;
+	
+	User altered.
+	
+	SQL> connect hr/hr
+	Connected.
+	
+	SQL> select table_name from user_tables;
+	
+	TABLE_NAME
+	------------------------------
+	REGIONS
+	DEPARTMENTS
+	COUNTRIES
+	EMPLOYEES
+	LOCATIONS
+	JOB_HISTORY
+	JOBS
+
+
+                                                      
+
+
+
+

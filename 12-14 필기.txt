@@ -1,0 +1,567 @@
+﻿						최종 포트폴리오
+						
+리눅스 --> 하둡 --> 딥러닝 --> R(머신러닝) --> 프로젝트 
+		      ↓			  ↓
+		    파이썬 		       강화학습
+
+
+■ 리눅스 수업 목차
+
+	1. 리눅스가 무엇인지 ?
+	2. 리눅스 기본 명령어
+	3. vi 편집기 명령어
+	4. 권한 관리
+	5. 디스크 관리
+	6. 프로세서 관리
+	7. 유저 생성 및 관리
+	8. 쉘스크립트 작성법
+	9. 리눅스 설치
+	10. 리눅스 환경에서 파이썬과 R사용하기
+
+
+
+
+
+
+
+
+
+
+■ 1. 리눅스가 무엇인지 ? 
+
+	* 리눅스를 왜 배워야 하는가 ?
+		1. 현업의 대용량 데이터는 대부분 window가 아니라 리눅스 나 유닉스 시스템에 저장이 되어있다.
+		2. 하둡이 리눅스 시스템에 설치 된다. 
+		3. 딥러닝을 구현하는 환경의 대부분이 리눅스 환경이다.
+
+	* 리눅스가 무엇인가?
+		유닉스가 너무 고가여서 리눅스 오픈소스를 핀란드의 리누즈 토발즈 학생이 1991년 11월에 개발을 했다.
+		리누즈 토발즈가 리눅스의 커널(자동차 엔진)을 개발하고 소스를 무료로 공개하고 전세계의 많은
+		개발자들이 이 오픈소스를 가져다가 더 좋게 개선을 해서 다시 인터넷에 올리고 하는 작업을 반복
+		하다보니 리눅스 os가 유닉스 보다 더 가볍고 안정적이게 되었다.
+
+		GNU프로젝트 --> 누구든지 배포된 오픈소스를 가져다가 개발할 수 있고 돈을 벌 목적으로 상용화를 
+				할 수도 있는데 한가지 지켜야 할 약속은 이 소스를 가져다가 더 좋게 수정했으면
+				그 코드를 인터넷에 올려줘야 하는 약속이 있다.
+
+		레드헷(상용버전) --------> Cent os
+		     유료		    무료
+
+		1. Oracle linux
+		2. Cento os
+		3. ubunt
+
+	* 리눅스 시스템 접속 및 환경 구성하는 방법
+		VirtualBox-5.0.14-105127-Win 설치
+		비주얼 창에서 11gWS2 실행
+		안된다면 https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html 에서
+		putty-64bit-0.70-installer.msi 깔아봐 
+		putty 시작프로그램에서 찾아서 실행
+		호스트에 192.168.19.77 입력하고 실행
+		test123/test 우리 gpu pc 서버에 접속하는 것
+		
+
+	파이썬 접속 명령어 : python3
+	나가기		   : exit()
+
+
+
+
+
+
+
+
+
+
+
+
+■ 2. 리눅스 기본 명령어
+
+
+
+★ 1. cd 명령어
+	"Change Directory 명령어로 디렉토리를 이동하는 명령어"
+
+	예제 : $ pwd <----- 현재 내가 있는 디렉토리 확인
+		  ↓
+		print working directory의 약자
+
+			test123@woody-dev:~$ pwd
+			/home/test123
+
+
+		$ ls <---- 현재 디렉토리에 있는 폴더와 파일을 확인
+		  ↓
+		list 의 약자
+
+			test123@woody-dev:~$ ls
+			labs			<---- 파란색이면 폴더
+
+
+		$ cd labs <---- labs디렉토리로 이동
+
+			test123@woody-dev:~/labs$ pwd
+			/home/test123/labs
+
+
+
+문제 1. 다시 /home/test123으로 이동하시오 !
+
+	test123@woody-dev:~/labs$ cd ..
+	test123@woody-dev:~$ pwd
+	/home/test123
+
+
+
+문제 2. 현재 디렉토리에서 / (루트) 디렉토리로 바로 이동하시오 !
+
+	test123@woody-dev:~$ cd /
+	test123@woody-dev:/$ pwd
+	/
+
+
+
+문제 3. /home 밑으로 이동하시오 !
+
+	test123@woody-dev:/$ cd /home		# 그냥 cd home해도 됨
+	test123@woody-dev:/home$ pwd
+	/home
+
+	test123@woody-dev:/home$ ls
+	test123  woody
+
+
+문제 4. /home/test123으로 이동하시오 !
+
+	test123@woody-dev:/home$ cd test123
+	test123@woody-dev:~$ pwd
+	/home/test123
+
+
+	※ 경로에는 크게 2가지 경로가 있다.
+		1. 절대경로 : cd "내가 가고자하는 정확한 위치"
+			예 : $ pwd
+			     $ cd /home
+
+		2. 상대경로 : 나의 현재위치를 상대로 이동하겠다.
+			예 : cd .. 나의 현재위치를 상대로 상위 디렉토리로 이동하겠다.
+
+		cd 	<--- 자기 자신의 홈 디렉토리로 이동
+				(/home/test123)
+
+문제 5. 현재 디렉토리에서 test 라는 디렉토리를 만들고 test 디렉토리로 이동하시오 !
+
+	test123@woody-dev:~$ mkdir test3
+	test123@woody-dev:~$ pwd
+	/home/test123
+	test123@woody-dev:~$ cd test3
+	test123@woody-dev:~/test3$ pwd
+	/home/test123/test3
+	test123@woody-dev:~/test3$
+
+
+
+문제 6. 지금 현재 디렉토리에서 상위 디렉토리의 상위디렉토리로 이동하시오 !
+
+	/home/test123/test3    ---->    /home
+
+	test123@woody-dev:~/test3$ cd ../..
+	test123@woody-dev:/home$
+	test123@woody-dev:/home$ pwd
+	/home
+
+
+
+문제 7. 그럼 다시 원래 있었던 위치로 이동하시오 !
+
+	test123@woody-dev:/home$ cd -
+	/home/test123/test3
+	test123@woody-dev:~/test3$ pwd
+	/home/test123/test3
+
+
+
+
+
+
+
+
+★ 2. touch 명령어
+
+	"파일의 용량이 0인 파일을 생성하는 명령어"
+
+	예 : $ touch a1.txt
+	     $ ls -l a1.txt
+
+		test123@woody-dev:~/test3$ touch a3.txt
+		test123@woody-dev:~/test3$ ls
+		a1.txt  a3.txt
+		test123@woody-dev:~/test3$ ls -l a3.txt
+		-rw-rw-r-- 1 test123 test123 0 12월 14 11:58 a3.txt
+
+
+
+문제 8. 자기 폴더(/home/test123/test3) 로 이동해서 아래의 파일들을 크기가 0으로 생성하시오
+
+	a.txt 	b.txt	c.txt	d.txt	e.txt	f.txt
+
+	test123@woody-dev:~/test3$ touch a.txt b.txt c.txt d.txt e.txt f.txt
+	test123@woody-dev:~/test3$ ls -l *.txta
+	-rw-rw-r-- 1 heaven heaven 0 Dec 14 01:45 a.txt
+	-rw-rw-r-- 1 heaven heaven 0 Dec 14 01:45 b.txt
+	-rw-rw-r-- 1 heaven heaven 0 Dec 14 01:45 c.txt
+	-rw-rw-r-- 1 heaven heaven 0 Dec 14 01:45 d.txt
+	-rw-rw-r-- 1 heaven heaven 0 Dec 14 01:45 e.txt
+	-rw-rw-r-- 1 heaven heaven 0 Dec 14 01:45 f.txt
+
+
+
+문제 9. 리눅스 서버에 자기 홈 디렉토리를 생성하시오 !
+
+	heaven@buzz:~/test$ cd
+	heaven@buzz:~$ pwd
+	/home/heaven
+
+
+
+문제 10. emp.txt를 리눅스 서버에 자기 홈 디렉토리에 올리시오 !
+
+	1. 도스창을 연다. 
+
+	2. c:\User\Administrator>  <---- 이 폴더에 emp.txt, dept.txt 를 가져다 둔다
+
+	3. ftp 192.168.56.104
+			★★다시
+
+
+
+
+
+
+
+
+★ 3. mkdir 명령어 
+
+	"디렉토리를 만드는 명령어"
+
+	예제 : 
+		heaven@buzz:~$ mkdir oracle_test
+		heaven@buzz:~$ ls -dir oracle_test
+		286449 oracle_test
+		heaven@buzz:~$ cd oracle_test
+		heaven@buzz:~/oracle_test$ pwd
+		/home/heaven/oracle_test
+
+
+
+문제 11. /home/ test014/oracle_test 밑에 아래의 하위 디렉토리를 생성하시오 !
+
+	heaven@buzz:~/oracle_test$ mkdir test
+	heaven@buzz:~/oracle_test$ cd test
+	heaven@buzz:~/oracle_test/test$ mkdir test2
+	heaven@buzz:~/oracle_test/test$ cd test2
+	heaven@buzz:~/oracle_test/test/test2$ mkdir test3
+	heaven@buzz:~/oracle_test/test/test2$ cd test3
+	heaven@buzz:~/oracle_test/test/test2/test3$ pwd
+	/home/heaven/oracle_test/test/test2/test3
+	
+	-다른방법
+		heaven@buzz:~/oracle_test$ mkdir -p test1/test2/test3/test4/test5
+
+
+	$ man mkdir  <---- mkdir 명령어의 메뉴얼 (q누르면 빠져나올 수 있음)
+
+
+
+
+
+
+
+
+★ 4. rm 명령어
+
+	"파일이나 디렉토리를 삭제하는 명령어"
+
+	★★★★★ 주의 사항 !!!!! 
+		리눅스나 유닉스는 휴지통이 없기 때문에 삭제할 때 특히 주의해야 한다 !!
+		삭제할 때 특히 주의해야 한다 !!!
+		백업이 없으면 절대 복구가 불가능하다 !!
+
+	예제 : 
+		heaven@buzz:~/oracle_test/test/test2/test3$ touch bbb.txt
+		heaven@buzz:~/oracle_test/test/test2/test3$ ls -l bbb.txt
+		-rw-rw-r-- 1 heaven heaven 0 Dec 14 05:38 bbb.txt
+		heaven@buzz:~/oracle_test/test/test2/test3$ rm bbb.txt
+		heaven@buzz:~/oracle_test/test/test2/test3$ ls -l bbb.txt
+		ls-l: command not found
+
+
+
+문제 12. 자기 홈디렉토리에 1.txt ~ 10.txt 를 생성하시오 !
+
+	heaven@buzz:~$ touch 1.txt		
+	heaven@buzz:~$ touch 2.txt		
+	heaven@buzz:~$ touch 3.txt		
+	heaven@buzz:~$ touch 4.txt		
+	heaven@buzz:~$ touch 5.txt		
+	heaven@buzz:~$ touch 6.txt		
+	heaven@buzz:~$ touch 7.txt
+	heaven@buzz:~$ ls
+	1.txt 2.txt 3.txt 4.txt 5.txt 6.txt 7.txt oracle_test test
+
+문제 13. 확장자가 .txt인 파일들을 전부 삭제하시오 !
+
+	heaven@buzz:~$ rm *.txt
+	heaven@buzz:~$ ls
+	oracle_test test
+
+
+
+문제 14. /home/oralce_test밑에 있는 아래의 디렉토리 들을 다 삭제하시오 
+
+	test1/test2/test3/test4/test5
+
+	heaven@buzz:~/oracle_test$ rm -rf *
+
+		※ 설명 : 현재 디렉토리 밑에 있는 모든 파일과 디렉토리를 다 삭제하겠다.
+
+			-r 옵션 : 현재 디렉토리 밑에 있는 모든 파일과 디렉토리를 다 삭제하겠다.
+			-f 옵션 : 삭제할때 원래는 삭제할까요? 라고 물어보는데 물어보지 않고 그냥 강제로 다 
+				  삭제해라 !
+
+
+
+
+
+★ 5. rmdir 명령어
+	"디렉토리를 삭제하는 명령어"
+
+	예 : 
+	heaven@buzz:~/oracle_test$ mkdir ddd
+	heaven@buzz:~/oracle_test$ ls
+	ddd
+	heaven@buzz:~/oracle_test$ rmdir ddd
+	heaven@buzz:~/oracle_test$ ls
+
+
+문제 15. 자기 홈 디렉토리 밑에 test9 라는 디렉토리를 만들고 test9 디렉토리밑에 test10 디렉토리를 만드시오 !
+
+
+	heaven@buzz:~$ mkdir test9
+	heaven@buzz:~$ ls
+	oracle_test test test9
+	heaven@buzz:~$ cd test9
+	heaven@buzz:~/test9$ mkdir test10
+	heaven@buzz:~/test9$ ls
+	test10
+
+	- 다른방법 
+	heaven@buzz:~$ mkdir -p ./test9/test10
+			       ↑
+			   현재 디렉토리
+
+
+문제 16. 자기 홈 디렉토리 밑에 있는 test9 와 test10 디렉토리를 전부 식제하시오 !
+
+	heaven@buzz:~$ rm -r test9	
+	heaven@buzz:~$ ls
+	oracle_test test
+
+
+
+
+
+
+
+★ 6. alias명령어
+
+	"자주 수행하는 명령어들을 쉽게 사용할 수 있도록 설정하는 명령어"
+
+	* 오라클 db에 접속
+		heaven@buzz:~$ sqlplus / as sysdba
+
+	* python 접속
+		heaven@buzz:~$ python3
+
+		heaven@buzz:~$ alias p='python3'
+
+		heaven@buzz:~$ p
+
+
+
+문제 17. 지금 설정되어있는 alias가 무엇이 있는지 조회하시오 !
+
+	heaven@buzz:~$ alias
+
+
+
+문제 18. p alias를 지우시오 !
+
+	heaven@buzz:~$ unalias p
+	heaven@buzz:~$ p	
+	p: command not found
+
+
+
+
+
+
+
+★ 7. cat 명령어
+	"파일의 내용을 화면에 출력하는 명령어"
+
+	예제 : 
+		heaven@buzz:~$ cat 파일명.txt
+		heaven@buzz:~$ vi emp.txt
+
+
+
+
+
+
+★ 8. redirection 명령어 
+
+	"화면에 출력되는 결과를 파일로 저장하는 명령어"
+
+	>> : 없으면 파일을 생성하고 있으면 기존 파일 뒤에 덧붙이겠다.
+	 > : 파일을 생성하겠다. 있으면 그냥 덮어쓰겠다
+
+	예 : $ cat emp.txt >> emp50.txt
+
+		지금 보고있는 emp.txt의 화면의 결과를 emp50.txt 로 생성한다.
+
+
+문제 20. 현재 디렉토리에 확장자가 .txt 인 파일들이 무엇이 있는지 조회하시오 !
+
+[orcl:~]$ ls -l *.txt
+
+
+
+문제 21. ls -l *.txt로 나온 결과를 all.txt라는 이름으로 저장하시오 !
+
+	[orcl:~]$ ls -l *.txt >> all.txt
+	[orcl:~]$ cat all.txt
+	-rw-r--r-- 1 oracle oinstall   1386 Dec 14 15:53 emp.txt
+	-rw-r--r-- 1 oracle oinstall   1386 Dec 14 16:19 emp50.txt
+	-rw-r--r-- 1 oracle oinstall 111181 Dec 14 15:43 winter.txt
+
+
+문제 22. cat emp.txt로 나온 결과를 all.txt파일 뒤에 덧붙이시오 !
+
+	[orcl:~]$ cat emp.txt >> all.txt
+	[orcl:~]$ cat all.txt
+	-rw-r--r-- 1 oracle oinstall   1386 Dec 14 15:53 emp.txt
+	-rw-r--r-- 1 oracle oinstall   1386 Dec 14 16:19 emp50.txt
+	-rw-r--r-- 1 oracle oinstall 111181 Dec 14 15:43 winter.txt
+	 7839 KING                 PRESIDENT                     81/11/17       5000                    10
+	 7698 BLAKE                MANAGER                  7839 81/05/01       2850                    30
+	 7782 CLARK                MANAGER                  7839 81/05/09       2450                    10
+	 7566 JONES                MANAGER                  7839 81/04/01       2975                    20
+	 7654 MARTIN               SALESMAN                 7698 81/09/10       1250       1400         30
+	 7499 ALLEN                SALESMAN                 7698 81/02/11       1600        300         30
+	 7844 TURNER               SALESMAN                 7698 81/08/21       1500          0         30
+	 7900 JAMES                CLERK                    7698 81/12/11        950                    30
+	 7521 WARD                 SALESMAN                 7698 81/02/23       1250        500         30
+	 7902 FORD                 ANALYST                  7566 81/12/11       3000                    20
+	 7369 SMITH                CLERK                    7902 80/12/09        800                    20
+	 7788 SCOTT                ANALYST                  7566 82/12/22       3000                    20
+	 7876 ADAMS                CLERK                    7788 83/01/15       1100                    20
+	 7934 MILLER               CLERK                    7782 82/01/11       1300                    10
+
+
+문제 23. ls -l * 로 나온 결과를 all.txt 파일에 덮어써버리시오 !
+
+	[orcl:~]$ ls -l * > all.txt
+	[orcl:~]$ cat all.txt
+
+
+
+
+
+
+
+★ 9. more 명령어
+	" 1페이지가 넘는 문서의 내용을 화면에 출력할 때 페이지 단위로 볼 수 있는 명령어"
+
+	예제 :
+		[orcl:~]$ more winter.txt
+		
+		전진키 : 스페이스
+		후진키 : b
+		페이지 단위로 내려가는 것 : f
+
+
+
+
+
+★ 10. head 명령어
+	
+	"문서의 처음 몇줄을 화면에 출력하는 명령어"
+
+	예제 : 
+		[orcl:~]$ [출력줄수] 파일명
+	[orcl:~]$ head -20 winter.txt
+	
+	 "Final Shooting Draft
+	by
+	Jennifer Lee
+	9/23/13
+	Property of the Walt Disney Animation Studios
+	OPEN ON: ICE.
+	We’re underwater looking up at it. A saw cuts through,
+	heading right for us.
+	EXT. SNOW-CAPPED MOUNTAINS ? DUSK
+	ICE HARVESTERS, dressed in traditional Sami clothing, score a
+	frozen lake. They SING.
+	”The Frozen Heart (Ice Worker’s Song)”
+	ICE HARVESTERS
+	BORN OF COLD AND WINTER AIR
+	AND MOUNTAIN RAIN COMBINING,
+	THIS ICY FORCE BOTH FOUL AND FAIR
+	HAS A FROZEN HEART WORTH MINING.
+	The men drag giant ice blocks through channels of water.
+	ICE HARVESTERS (CONT’D)
+
+
+
+문제 24. 겨울왕국 대본의 100줄까지의 내용을 winter_head.txt로 저장하시오 !
+
+	[orcl:~]$ head -100 winter.txt >> winter_head.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

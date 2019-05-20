@@ -1,0 +1,659 @@
+﻿문제 90. (리눅스의 파이썬을 이용해서 구현) 스마일 게이트의 알고리즘 시험문제
+	 5!를 코드로 구현하시오 !(코드는 파이썬, c언어, java)
+
+	[orcl:~]$ vi factorial.py
+	
+	a = int(input('input number : '))
+	b = 1
+	for i in range(1,a+1):
+	    b *= i
+	print(b)
+	
+	[orcl:~]$ python factorial.py
+	input number : 5
+	120
+
+
+
+
+
+
+
+
+
+
+
+■ vi 편집기 명령어
+
+
+
+★ vi 편집기 내에서 문자를 변경하는 명령어
+
+	1. :/문자 -----> 문자 검색
+
+		예 : $ vi winter.txt
+			:/ELSA
+			알파벳 n을 누르면서 계속 검색
+			shift + n을 누르면서 다시 뒤로 검색
+
+	2. :s/기존 문자/변경할 문자
+		지금 커서가 있는 현재 행의 기존문자를 변경할 문자로 변경하겠다.
+
+	3. :%s/기존문자/변경할 문자/g	# g는 global
+		문서 전체의 기존문자를 변경할 문자로 변경하겠다.
+
+
+
+문제 91. BLAKE의 직업을 MANAGER에서 SALESMAN으로 변경하시오 !
+
+	:s/MANAGER/SALESMAN
+
+
+
+문제 92. emp.txt에서 직업이 MANAGER인 사원들은 전부 SALESMAN으로 변경하시오 !
+
+	:%s/MANAGER/SALESMAN/g
+
+
+
+문제 93. emp.txt를 emp1.txt ~ emp20.txt로 복사하시오 !
+
+	[orcl:~]$ vi cp_emp.sh
+		
+	#!/bin/bash
+	
+	i=1
+	while [ $i -le 20 ]
+	do
+	  cp emp.txt emp$i.txt
+	  let i=i+1
+	done
+	
+	[orcl:~]$ sh cp_emp.sh
+
+
+
+
+★ 리눅스 쉘 스크립트를 디버깅 모드로 실행하는 방법
+
+$ sh -x cp_emp.sh
+
+
+
+
+
+문제 94. emp1.txt ~ emp20.txt 의 내용을 변경하는데 SALESMAN을 jjj로 변경하시오 !
+
+	[orcl:~]$ vi emp*.txt
+	:argdo %s/SALESMAN/jjj/g |update
+
+
+
+문제 95. winter.txt 대본을 100개로 복사하고 winter.txt ~ winter100.txt 로 복사한다.
+	 winter.txt ~ winter100.txt 의 내용중에 by 를 bybyby로 한번에 변경하시오 !
+
+	[orcl:~]$ vi cp_winter.sh
+	
+	#!/bin/bash
+	
+	i=1
+	while [ $i -le 100 ]
+	do
+	  cp winter.txt winter$i.txt
+	  let i=i+1
+	done
+	
+	[orcl:~]$ sh cp_winter.sh
+	
+	[orcl:~]$ vi winter*.txt
+	:argdo %s/by/bybyby/g |update
+
+
+
+- 숫자열 비교
+	1. 숫자1 -eq 숫자2 : 두 숫자가 같으면 True
+	2. 숫자1 -ne 숫자2 : 두 숫자가 같지 않으면 True
+	3. 숫자1 -gt 숫자2 : 숫자1이 숫자2보다 크다면 True
+	4. 숫자1 -ge 숫자2 : 숫자1이 숫자2보다 크거나 같다면 True
+	5. 숫자1 -lt 숫자2 : 숫자1이 숫자2보다 작다면 True
+	6. 숫자1 -le 숫자2 : 숫자1이 숫자2보다 작거나 같으면 True
+	7. !숫자1          : 숫자1이 거짓이라면 True
+
+
+문제 96. winter1.txt ~ winter100.txt를 전부 삭제하시오 !
+
+	$ vi rm_winter.sh
+	
+	#!/bin/bash
+	
+	i=1
+	while [ $i -le 100 ]
+	do
+	  rm winter$i.txt
+	  let i=i+1
+	done
+	
+	$ sh rm_winter.sh
+
+
+
+
+
+
+
+
+
+
+
+
+■ 리눅스 수업 목차
+
+	1. 리눅스가 무엇인가?
+	2. 리눅스 기본 명령어
+	3. vi 편집기 명령어
+	4. 권한관리
+
+
+
+
+
+
+■ 4. 권한 관리
+
+	리눅스에서 파이썬의 배치파일을 실행하거나 R배치 파일을 실행하거나 하둡을 설치하고 운영을 할 때 여러가지
+	문제들이 발생하는데 그 중에 많은 문제들이 권한에 관련한 오류들이 많다.
+	그래서 권한관리를 잘 알아둬야 한다.
+
+
+	* 권한관리에 관한 명령어 3가지
+		1. chmod	: change mode
+		2. chown	: change file attributes
+		3. chattr	: change ownership of a file
+
+	* 권한관리 표
+	-------------------------------------------------------------------------------------
+	| 번호 |	권한 |	 대표문자 |	파일 	  |	디렉토리		    |
+	-------------------------------------------------------------------------------------
+	| 1    |    읽기권한 |		r |	읽고,copy |	디렉토리에서 ls가능	    |
+	| 2    |    쓰기권한 |		w |	수정	  |	디렉토리에 파일 생성 가능   |
+	| 3    |    실행권한 |		x |	실행	  |	디렉토리에서 cd로 접근 가능 |
+	-------------------------------------------------------------------------------------
+
+	* ls -l 로 특정 파일을 조회했을 때 나오는 권한부분을 해석
+
+	$ ls -l emp.txt
+	-rw-r--r-- 1 oracle oinstall 1366 Dec 19 10:47 emp.txt
+	   ↑		↑	↑
+	  권한	    파일소유자 그룹
+
+	* 권한 부분을 좀 더 상세하게 분석하시오 !
+
+	-			rw-			r--		r--
+	↑			↑			↑		↑
+	디렉토리인지		파일의 소유자의		그룹의 권한	기타유저
+	파일인지를 나타냄	권한
+
+
+문제 97. emp.txt 의 소유자의 권한을 읽기만 가능하도록 수정하시오 !
+
+	[orcl:~]$ chmod u-w emp.txt
+	[orcl:~]$ ls -l emp.txt
+	-r--r--r-- 1 oracle oinstall 1366 Dec 19 10:47 emp.txt
+
+
+
+
+	※ 권한관리 단축어 정리
+		1. u : 유저		1. r : 읽기
+		2. g : 그룹		2. w : 쓰기
+		3. o : 기타유저		3. x : 실행
+
+	설명 : read only 파일도 !(느낌표) 를 붙이고 저장을 하면 강제종료되어서 저장된다.
+		수정하고 ---> :wq!
+
+
+문제 98. emp.txt의 소유자의 권한에 읽기 권한도 없애시오 !
+
+	[orcl:~]$ chmod u-r emp.txt
+	[orcl:~]$ ls -l emp.txt
+	----r--r-- 1 oracle oinstall 1370 Dec 19 11:46 emp.txt
+
+
+문제 99. emp.txt 의 소유자의 권한에 읽기, 쓰기, 실행권한을 넣으시오 
+
+	[orcl:~]$ chmod u+rwx emp.txt
+	[orcl:~]$ ls -l emp.txt
+	-rwxr--r-- 1 oracle oinstall 1370 Dec 19 11:46 emp.txt
+
+
+문제 100. emp.txt 에 대해서 소유자, 그룹, 기타 유저에 대해서 읽기, 쓰기, 실행권한을 모두 넣으시오 !
+
+	[orcl:~]$ chmod ugo+rwx emp.txt
+	[orcl:~]$ ls -l emp.txt
+	-rwxrwxrwx 1 oracle oinstall 1370 Dec 19 11:46 emp.txt
+
+
+
+문제 101. oracle 유저(소유자)는 emp.txt에 대해서 무조건 읽기만 할 수 있게 하고 쓰지는 못하게 하며 그룹과
+	  다른 기타 유저에 대해서는 읽기, 쓰기, 실행을 다 못하게 하시오 !
+
+	[orcl:~]$ chmod u-wx,go-rwx emp.txt
+	[orcl:~]$ ls -l emp.txt
+	-r-------- 1 oracle oinstall 1370 Dec 19 11:46 emp.txt
+
+
+
+문제 102. (점심시간 문제) 리눅스에서 파이썬으로 아래의 그림을 그리시오 !
+
+	[orcl:~]$ vi star.py
+
+	#-*- coding: utf-8 -*-
+	
+	a = int(input('▒~H▒▒~^~P를 ▒~^~E▒| ▒▒~U~X▒~D▒▒~Z~T '))
+	for i in range(1,a+1):
+	    print ((a-i)*' '+i*'▒~X~E ')
+	for i in range(a-1, 0, -1):
+	    print((a-i)*' '+i*'▒~X~E ')
+	
+	[orcl:~]$ python star.py
+	숫자를 입력하세요 7
+	      ★
+	     ★ ★
+	    ★ ★ ★
+	   ★ ★ ★ ★
+	  ★ ★ ★ ★ ★
+	 ★ ★ ★ ★ ★ ★
+	★ ★ ★ ★ ★ ★ ★
+	 ★ ★ ★ ★ ★ ★
+	  ★ ★ ★ ★ ★
+	   ★ ★ ★ ★
+	    ★ ★ ★
+	     ★ ★
+	      ★
+
+
+
+문제 103. oracle 유저가 emp.txt에 대해서 chmod명렁어 자체를 수행하지 못하게 하시오 !
+
+	root 유저 (최상위 유저)
+		↓
+	oracle, test01 ~ test014
+
+	* 내가 누구인지 확인하는 방법 ?
+		$ whoami
+
+	* 최상위 계정인 root 유저로 접속하는 방법?
+		$ su -
+			패스워드 : oracle
+		[orcl:~]$ su -
+		Password:
+		[root@edydr1p0 ~]# whoami
+		root
+
+		[root@edydr1p0 ~]# pwd
+		/root
+
+		[root@edydr1p0 ~]# cd /home/oracle
+		[root@edydr1p0 oracle]# pwd
+		/home/oracle
+		[root@edydr1p0 oracle]# ls -l emp.txt
+		-r-------- 1 oracle oinstall 1370 Dec 19 11:46 emp.txt
+		[root@edydr1p0 oracle]# chattr +i emp.txt
+
+	* 다시 oracle 유저로 접속해서 chmod 명령어를 emp.txt 에 수행해 본다.
+
+		[root@edydr1p0 oracle]# su - oracle
+		[orcl:~]$ chmod u-r emp.txt
+		chmod: changing permissions of `emp.txt': Operation not permitted
+
+
+
+문제 104. 다시 oracle 계정이 emp.txt 파일을 chmod로 권한수정할 수 있도록 하게 하시오 !
+
+	[orcl:~]$ su -
+	Password:
+	[root@edydr1p0 ~]# cd /home/oracle
+	[root@edydr1p0 oracle]# pwd
+	/home/oracle
+	[root@edydr1p0 oracle]# chattr -i emp.txt
+	[root@edydr1p0 oracle]# su - oracle
+	[orcl:~]$ chmod u-r emp.txt
+	[orcl:~]$ ls -l emp.txt
+	---------- 1 oracle oinstall 1370 Dec 19 11:46 emp.txt
+
+
+
+★ 권한을 설정하는 숫자
+
+	0 ---> 퍼미션을 허용하지 않겠다.
+	1 ---> 실행(x) 퍼미션을 허용하겠다.
+	2 ---> 쓰기(w) 퍼미션을 허용하겠다.
+	4 ---> 읽기(r) 퍼미션을 허용하겠다.
+
+	예 : 
+		$ chmod u+rwx,g+rw,o+r emp.txt
+
+			↓ 위의 명령어를 숫자로 실행하면 아래와 같이 간단해진다
+
+		$ chmod 764 emp.txt
+
+
+
+문제 105. emp.txt에 대해서 아래와 같이 권한이 설정이 될 수 있도록 하시오 !
+
+	$ ls -l emp.txt
+	-r--r--r--
+
+	[orcl:~]$ chmod 444 emp.txt
+	[orcl:~]$ ls -l emp.txt
+	-r--r--r-- 1 oracle oinstall 1370 Dec 19 11:46 emp.txt
+
+
+
+문제 106. winter.txt에 대해서 권한을 아래와 같이 설정이 될 수 있도록 하시오 !
+
+	$ ls -l winter.txt
+	-rwxr--r--
+
+	[orcl:~]$ chmod 744 winter.txt
+	[orcl:~]$ ls -l winter.txt
+	-rwxr--r-- 1 oracle oinstall 222718 Dec 19 11:15 winter.txt
+
+
+
+
+
+★ chown 명령어
+	"파일이나 디렉토리의 소유자를 변경하는 명령어"
+
+	[orcl:~]$ su -
+	Password:
+
+	[root@edydr1p0 ~]# cd /home/oracle
+	[root@edydr1p0 oracle]# ls -l emp.txt
+	-r--r--r-- 1 oracle oinstall 1370 Dec 19 11:46 emp.txt
+
+	[root@edydr1p0 oracle]# whoami
+	root
+	[root@edydr1p0 oracle]# chown root:root emp.txt
+				       ↑   ↑
+				    유저명 그룹명
+	[root@edydr1p0 oracle]# ls -l emp.txt
+	-r--r--r-- 1 root root 1370 Dec 19 11:46 emp.txt
+
+
+
+문제 107. 다시 emp.txt의 소우자를 oracle로 변경하고 그룹은 oinstall로 변경하시오 !
+
+	$ su -
+	$ cd /home/oracle
+	$ chown oracle:oinstall emp.txt
+	$ exit
+	$ ls -l emp.txt
+	-r--r--r-- 1 oracle oinstall 1370 Dec 19 11:46 emp.txt
+
+
+문제 108. /home/oracle밑에 bbb라는 디렉토리를 만들고 bbb라는 디렉토리 밑에 /home/oracle밑에 있는 확장자 .txt
+	  파일들을 전부 copy하시오 !
+
+	[orcl:~]$ mkdir bbb
+	[orcl:~]$ cp *.txt ./bbb/
+	[orcl:~]$ cd bbb
+	[orcl:bbb]$ ls
+	dept.txt  emp10.txt  emp13.txt  emp16.txt  emp19.txt  emp3.txt  emp500.txt  emp8.txt      winter.txt
+	emp.txt   emp11.txt  emp14.txt  emp17.txt  emp2.txt   emp4.txt  emp6.txt    emp9.txt      winter200.txt
+	emp1.txt  emp12.txt  emp15.txt  emp18.txt  emp20.txt  emp5.txt  emp7.txt    salgrade.txt
+
+
+문제 109. /home/oracle 밑에 bbb 디렉토리의 소유자를 root유저로 변경하시오 
+
+	[orcl:~]$ ls -ld /home/oracle/bbb
+	drwxr-xr-x 2 oracle oinstall 4096 Dec 19 14:41 /home/oracle/bbb
+		       ↑
+		디렉토리의 소유자가 oracle
+		디렉토리의 소유자를 바꾼다는 것은 디렉토리 안의 데이터들의 소유자도 바뀐다는 것!
+
+	[orcl:~]$ su -
+	Password:
+	[root@edydr1p0 ~]# cd /home/oracle
+	[root@edydr1p0 oracle]# chown -R root:root /home/oracle/bbb
+					-R은 그 디렉토리 안에있는 모든파일들의 소유자를 싹 변경 하겠다.
+					 만약 -R옵션을 안붙이면 디렉토리 소유자만 변경되고 파일들은 변경 안된다.
+	[root@edydr1p0 oracle]# ls -ld /home/oracle/bbb
+	drwxr-xr-x 2 root root 4096 Dec 19 14:41 /home/oracle/bbb
+	[root@edydr1p0 bbb]# ls -lrt
+	total 328
+	-rw-r--r-- 1 root root   6366 Dec 19 14:41 winter200.txt
+	-rwxr--r-- 1 root root 222718 Dec 19 14:41 winter.txt
+	-rw-r--r-- 1 root root     65 Dec 19 14:41 salgrade.txt
+	-rw-r--r-- 1 root root   1386 Dec 19 14:41 emp9.txt
+				:
+				:
+
+
+
+문제 110. 다시 /home/oracle/bbb 디렉토리의 소유자를 oracle 로 변경하시오 !
+	  (소유자 : oracle, 그룹 : oinstall )
+
+	[root@edydr1p0 bbb]# chown -R oracle:oinstall /home/oracle/bbb
+
+
+
+
+
+
+
+
+■ 리눅스 수업 목차
+
+	1. 리눅스가 무엇인가?
+	2. 리눅스 기본 명령어
+	3. vi 편집기 명령어
+	4. 권한관리
+	5. 디스크 관리
+
+
+
+
+■ 5. 디스크 관리 
+
+	* 디스크 관리 명령어 3가지
+		1. df 명령어
+		2. du 명령어
+		3. sar 명령어 
+
+
+
+
+★ du 명령어
+
+	"현재 파일/디렉토리의 디스크 사용량을 표시하는 명령어"
+
+	예제 :
+		[orcl:~]$ du -sh
+		55M     .
+		[orcl:~]$ du -s
+		55896   .
+
+	[orcl:~]$ du -s *.txt
+	4       dept.txt
+	4       emp.txt
+	4       emp1.txt
+	4       emp10.txt
+	4       emp11.txt
+		:
+		:
+
+
+
+문제 111. 위의 txt 파일의 총 크기를 출력하시오 !
+
+	[orcl:~]$ du -s *.txt | awk '{sum = sum + $1} END {print sum}'
+	328
+
+	또는
+
+	[orcl:~]$ du -c *.txt
+	4       dept.txt
+	4       emp.txt
+		:
+		:
+	4       salgrade.txt
+	224     winter.txt
+	8       winter200.txt
+	328     total
+
+
+
+
+
+
+
+
+
+★ df 명령어
+	" 현재 파일 시스템의 총 사용율을 확인하는 명령어"
+
+	예 : 
+		[orcl:~]$ df -hP
+		Filesystem            Size  Used Avail Use% Mounted on
+		/dev/mapper/VolGroup00-LogVol00  190G   44G  137G  25% /
+		/dev/sda1              99M   18M   76M  20% /boot
+		tmpfs                1014M  442M  572M  44% /dev/shm
+
+
+
+
+★ sar 명령어 
+	"disk의 i/o 성능을 모니터링하는 명령어 "
+
+	예제 : 
+		[orcl:~]$ sar 1 100
+		Linux 2.6.18-164.el5 (edydr1p0.us.oracle.com)   12/19/18
+		
+		15:41:26          CPU     %user     %nice   %system   %iowait    %steal     %idle
+		15:41:27          all      0.00      0.00      0.00      0.00      0.00    100.00
+		15:41:28          all      0.50      0.00      0.50      0.00      0.00     99.00
+		15:41:29          all      0.00      0.00      0.50      0.00      0.00     99.50
+					:
+					:
+
+		오라클에서 악성 SQL을 수행하거나 시스템에서 무한루프를 돌리면 CPU 사용율과 %user의 사용율이
+		올라간다.
+
+	* 컬럼 소개
+
+	%user	-> oracle 유저와 같은 일반 유저가 사용하는 disk i/o
+	%nice	-> cpu를 양보하는 친절도
+	%system	-> system을 사용하는 disk i/o
+	%iowait	-> i/o를 일으키면서 얼마나 대기하는지
+	%idle	-> 작업을 안하고 있는 idle한 상태
+	%steal	-> ?
+
+
+문제 112. 나의 프로세서의 cpu를 양보하는 친절도 확인하는 방법 ?
+
+	[orcl:~]$ ps
+	  PID TTY          TIME CMD
+	 4996 pts/1    00:00:00 bash	<---- 4996 번호 확인
+	 7682 pts/1    00:00:00 vim
+	 8779 pts/1    00:00:00 bash
+	10614 pts/1    00:00:00 ps
+
+	[orcl:~]$ top -p 7787
+	  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND
+	 4996 oracle    16   0  4676 1448 1164 S  0.0  0.1   0:00.23 bash
+
+
+
+문제 113. sar 1 1000 결과화면을 sar_20181219.txt 로 저장하시오 !
+
+	[orcl:~]$ sar 1 1000 >> sar_20181219.txt
+
+
+
+문제 114. 위의 명령어가 그냥 백그라운드로 실행되게 하시오 !
+
+	[orcl:~]$ sar 1 1000 >> sar_20181219.txt &
+	[1] 10778	<----- job 번호
+
+
+
+문제 115. sar_20181219.txt 파일의 사이즈가 점점 커지고 있는지 확인하시오 !
+
+	[orcl:~]$ ls -l sar_20181219.txt
+	-rw-r--r-- 1 oracle oinstall 16842 Dec 19 16:37 sar_20181219.txt
+	[orcl:~]$ ls -l sar_20181219.txt
+	-rw-r--r-- 1 oracle oinstall 17088 Dec 19 16:37 sar_20181219.txt
+				:
+				:
+
+
+문제 116. sar_20181219.txt의 뒷부분의 데이터를 실시간으로 볼 수 있게 하시오 !
+
+	[orcl:~]$ tail -f sar_20181219.txt
+	16:39:25          all      0.00      0.00      0.50      0.00      0.00     99.50
+	16:39:26          all      0.50      0.00      1.00      0.00      0.00     98.51
+	16:39:27          all      0.00      0.00      1.00      0.00      0.00     99.00
+
+
+문제 117. (리눅스에서 파이썬으로 구현하세요)
+	  리스트의 메소드를 이용하지 말고 loop문으로 직접 코드를 작성해서 아래의 결과를 출력하시오 !
+	  (오늘의 마지막 문제 댓글로 올리세요 !)
+
+	a = raw_input('input string : ')
+	b = ''
+	for i in range(1, len(a)+1):
+	b += a[-i]
+	print b
+
+
+
+
+
+
+
+
+
+
+
+
+wol
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
